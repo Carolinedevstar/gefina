@@ -1,14 +1,19 @@
-import { createServer } from 'node:http';
+import expresss from 'express';
 
-import send from './send.ts';
+const app = expresss();
 
-createServer(function (request, response) {
-    if (request.url !== '/api/health') {
-        response.writeHead(404, { 'content-type': 'application/json'});
-        response.end(JSON.stringify({ message: 'Recurso não encontrado.'}));
-        return;
-    }
+app.use(function(request, response, next) {
+    console.log(request.method + ' ' + request.url);
+    next();
 
-    response.writeHead(200, { 'content-type': 'application/json' });
-    response.end(JSON.stringify({ status: 'ok' }));
-}).listen(3000);
+});     
+
+app.get('/api/health', function (request, response) {
+    response.status(200).json({ status: 'ok'});
+});
+
+app.use(function (request, response) {
+    response.status(404).json({ message: 'Recurso não encontrado.'});
+});
+
+app.listen(3000);
