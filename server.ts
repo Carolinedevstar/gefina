@@ -59,6 +59,10 @@ app.get('/api/invoices', function(request, response){
     response.status(200).json(invoices);
 });
 
+app.get('/api/invoices/:id', function (request, response) {
+    request.params.id
+});
+
 app.use(function (request, response) {
     response.status(404).json({ message: 'Recurso não encontrado.'});
 });
